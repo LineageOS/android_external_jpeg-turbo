@@ -12,13 +12,13 @@ include $(CLEAR_VARS)
 ANDROID_JPEG_USE_VENUM := true
 
 # Disable VeNum optimizations if they are not supported on the build target
-#ifneq ($(ARCH_ARM_HAVE_VFP),true)
-#ANDROID_JPEG_USE_VENUM := false
-#else
-#ifneq ($(ARCH_ARM_HAVE_NEON),true)
-#ANDROID_JPEG_USE_VENUM := false
-#endif
-#endif
+ifneq ($(ARCH_ARM_HAVE_VFP),true)
+ANDROID_JPEG_USE_VENUM := false
+else
+ifneq ($(ARCH_ARM_HAVE_NEON),true)
+ANDROID_JPEG_USE_VENUM := false
+endif
+endif
 
 # From autoconf-generated Makefile
 EXTRA_DIST = simd/nasm_lt.sh simd/jcclrmmx.asm simd/jcclrss2.asm simd/jdclrmmx.asm simd/jdclrss2.asm \
@@ -27,7 +27,7 @@ EXTRA_DIST = simd/nasm_lt.sh simd/jcclrmmx.asm simd/jcclrss2.asm simd/jdclrmmx.a
 
 ifeq ($(ANDROID_JPEG_USE_VENUM),true)
 libsimd_SOURCES_DIST = simd/jsimd_arm_neon.S \
-	asm/armv7//jdcolor-armv7.S asm/armv7/jdidct-armv7.S \
+	asm/armv7/jdcolor-armv7.S asm/armv7/jdidct-armv7.S \
 	simd/jsimd_arm.c
 else
 libsimd_SOURCES_DIST = jsimd_none.c
